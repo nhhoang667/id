@@ -14,6 +14,10 @@ const years = [["2024", "2027"], ["2023", "2026"]];
 const regPrefixes = ["721912", "721913", "721914"];
 const avatars = Array.from({ length: 15 }, (_, i) => `images/${i + 1}.png`);
 
+// 👉 Biến toàn cục để dùng tên khi tải file
+let generatedName = "";
+let generatedRegNo = "";
+
 // 👉 Hàm sinh tên đầy đủ ngẫu nhiên
 function getRandomName() {
   const first = firstNames[Math.floor(Math.random() * firstNames.length)];
@@ -36,14 +40,10 @@ function loadImage(src) {
     img.src = src;
   });
 }
-let generatedName = "";
-let generatedRegNo = "";
 
 async function generateID() {
   const canvas = document.getElementById("idCanvas");
   const ctx = canvas.getContext("2d");
-  let generatedName = "";
-  let generatedRegNo = "";
 
   try {
     const template = await loadImage("template/id_template.png");
@@ -59,7 +59,11 @@ async function generateID() {
     const avatarPath = randomFrom(avatars);
     const avatar = await loadImage(avatarPath);
 
-    // 📸 Avatar (góc trái)
+    // Lưu thông tin để đặt tên file
+    generatedName = name;
+    generatedRegNo = regNo;
+
+    // 📸 Avatar
     ctx.drawImage(avatar, 50, 195, 180, 260);
 
     // 📝 Thông tin text
@@ -79,12 +83,11 @@ async function generateID() {
   }
 }
 
-
 function downloadImage() {
   const canvas = document.getElementById("idCanvas");
   const link = document.createElement("a");
 
-  const safeName = generatedName.replace(/\s+/g, '');
+  const safeName = generatedName.replace(/\s+/g, ''); // Xóa khoảng trắng
   const suffix = generatedRegNo.slice(-3);
   const filename = `${safeName}${suffix}@dsuniversity.ac.in.jpg`;
 
@@ -110,4 +113,3 @@ function downloadPDF() {
   pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
   pdf.save(filename);
 }
-
