@@ -36,10 +36,14 @@ function loadImage(src) {
     img.src = src;
   });
 }
+let generatedName = "";
+let generatedRegNo = "";
 
 async function generateID() {
   const canvas = document.getElementById("idCanvas");
   const ctx = canvas.getContext("2d");
+  let generatedName = "";
+  let generatedRegNo = "";
 
   try {
     const template = await loadImage("template/id_template.png");
@@ -75,10 +79,16 @@ async function generateID() {
   }
 }
 
+
 function downloadImage() {
   const canvas = document.getElementById("idCanvas");
   const link = document.createElement("a");
-  link.download = "student_id.jpg";
+
+  const safeName = generatedName.replace(/\s+/g, '');
+  const suffix = generatedRegNo.slice(-3);
+  const filename = `${safeName}${suffix}@dsuniversity.ac.in.jpg`;
+
+  link.download = filename;
   link.href = canvas.toDataURL("image/jpeg");
   link.click();
 }
@@ -86,11 +96,18 @@ function downloadImage() {
 function downloadPDF() {
   const canvas = document.getElementById("idCanvas");
   const imgData = canvas.toDataURL("image/jpeg");
+
+  const safeName = generatedName.replace(/\s+/g, '');
+  const suffix = generatedRegNo.slice(-3);
+  const filename = `${safeName}${suffix}@dsuniversity.ac.in.pdf`;
+
   const pdf = new window.jspdf.jsPDF({
     orientation: "landscape",
     unit: "px",
     format: [canvas.width, canvas.height],
   });
+
   pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
-  pdf.save("student_id.pdf");
+  pdf.save(filename);
 }
+
