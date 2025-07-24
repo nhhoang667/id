@@ -12,7 +12,10 @@ const lastNames = [
 
 const years = [["2024", "2027"], ["2023", "2026"]];
 const regPrefixes = ["721912", "721913", "721914"];
-const avatars = Array.from({ length: 15 }, (_, i) => `images/${i + 1}.png`);
+
+// 👉 Biến toàn cục để dùng tên khi tải file
+let generatedName = "";
+let generatedRegNo = "";
 
 // 👉 Hàm sinh tên đầy đủ ngẫu nhiên
 function getRandomName() {
@@ -28,6 +31,7 @@ function randomFrom(arr) {
 function loadImage(src) {
   return new Promise((resolve, reject) => {
     const img = new Image();
+    img.crossOrigin = "anonymous"; // Cho phép tải ảnh online
     img.onload = () => resolve(img);
     img.onerror = () => {
       console.error("❌ Error loading:", src);
@@ -36,14 +40,10 @@ function loadImage(src) {
     img.src = src;
   });
 }
-let generatedName = "";
-let generatedRegNo = "";
 
 async function generateID() {
   const canvas = document.getElementById("idCanvas");
   const ctx = canvas.getContext("2d");
-  let generatedName = "";
-  let generatedRegNo = "";
 
   try {
     const template = await loadImage("template/id_template.png");
@@ -56,10 +56,14 @@ async function generateID() {
     const regNo = randomFrom(regPrefixes) + Math.floor(100000 + Math.random() * 900000);
     const [startYear, endYear] = randomFrom(years);
     const barcode = "24CV" + regNo.slice(-3);
-    const avatarPath = randomFrom(avatars);
-    const avatar = await loadImage(avatarPath);
 
-    // 📸 Avatar (góc trái)
+    generatedName = name;
+    generatedRegNo = regNo;
+
+    // 📸 Avatar từ nguồn online
+    const avatarURL = "https://thispersondoesnotexist.com/image";
+    const avatar = await loadImage(avatarURL);
+
     ctx.drawImage(avatar, 50, 195, 180, 260);
 
     // 📝 Thông tin text
@@ -70,7 +74,6 @@ async function generateID() {
     ctx.fillText(`Reg. No.: ${regNo}`, 280, 305);
     ctx.fillText(`Year       : ${startYear} - ${endYear}`, 280, 345);
 
-    // 🧾 Barcode (text only)
     ctx.fillStyle = "black";
     ctx.font = "bold 26px monospace";
     ctx.fillText(barcode, 360, 455);
@@ -78,7 +81,6 @@ async function generateID() {
     console.error("🚨 Failed to generate:", err);
   }
 }
-
 
 function downloadImage() {
   const canvas = document.getElementById("idCanvas");
