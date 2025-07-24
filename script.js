@@ -99,18 +99,6 @@ async function generateID() {
   }
 }
 
-function downloadImage() {
-  const canvas = document.getElementById("idCanvas");
-  const link = document.createElement("a");
-
-  const safeName = generatedName.replace(/\s+/g, ''); // Xóa khoảng trắng
-  const suffix = generatedRegNo.slice(-3);
-  const filename = `${safeName}${suffix}@dsuniversity.ac.in.jpg`;
-
-  link.download = filename;
-  link.href = canvas.toDataURL("image/jpeg");
-  link.click();
-}
 
 function downloadPDF() {
   const canvas = document.getElementById("idCanvas");
@@ -128,4 +116,15 @@ function downloadPDF() {
 
   pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
   pdf.save(filename);
+}
+
+// ✅ NEW: Copy full name
+function copyName() {
+  if (!generatedName) {
+    alert("Please generate an ID first.");
+    return;
+  }
+  navigator.clipboard.writeText(generatedName)
+    .then(() => alert(`Copied: ${generatedName}`))
+    .catch(() => alert("Failed to copy name."));
 }
