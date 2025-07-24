@@ -77,7 +77,7 @@ async function generateID() {
     const safeName = generatedName.replace(/\s+/g, '');
     const suffix = generatedRegNo.slice(-3);
     const email = `${safeName}${suffix}@dsuniversity.ac.in`;
-    document.getElementById("emailBox").value = email;
+    document.getElementById("emailDisplay").textContent = email;
 
   } catch (err) {
     console.error("🚨 Failed to generate:", err);
