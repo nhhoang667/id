@@ -102,14 +102,4 @@ function downloadPDF() {
   pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
   pdf.save(filename);
 }
-function copyEmail() {
-  const emailBox = document.getElementById("emailBox");
-  emailBox.select();
-  emailBox.setSelectionRange(0, 99999); // For mobile
-  navigator.clipboard.writeText(emailBox.value).then(() => {
-    alert("📋 Email copied: " + emailBox.value);
-  }).catch(err => {
-    alert("❌ Failed to copy email");
-    console.error(err);
-  });
-}
+
