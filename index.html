@@ -8,15 +8,14 @@
 </head>
 <body>
   <h1>Student ID Generator</h1>
+  <br>
+  <h1 id="emailDisplay" style="display: inline; font-size: 20px; color: #003366;"><h1>
   <canvas id="idCanvas" width="800" height="504"></canvas>
   <div style="margin-top: 10px;">
     <button onclick="generateID()">Generate ID</button>
     <br>
-    <button onclick="downloadPDF()">Download PDF</button>
     <br>
-    <label for="emailBox">Student Email:</label>
-    <input type="text" id="emailBox" readonly style="width: 320px; font-weight: bold;" />
-    <button onclick="copyEmail()">Copy</button>
+    <button onclick="downloadPDF()">Download PDF</button>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="script.js"></script>
