@@ -28,7 +28,7 @@ const lastNames = [
 
 const years = [["2024", "2027"], ["2023", "2026"]];
 const regPrefixes = ["721912", "721913", "721914"];
-const avatars = Array.from({ length: 50 }, (_, i) => `images/${i + 1}.png`);
+const avatars = Array.from({ length: 30 }, (_, i) => `images/${i + 1}.png`);
 
 // 👉 Biến toàn cục để dùng tên khi tải file
 let generatedName = "";
