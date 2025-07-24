@@ -12,13 +12,13 @@ const lastNames = [
 
 const years = [["2024", "2027"], ["2023", "2026"]];
 const regPrefixes = ["721912", "721913", "721914"];
-const avatars = Array.from({ length: 15 }, (_, i) => `images/${i + 1}.png`);
+const avatars = Array.from({ length: 15 }, (_, i) => images/${i + 1}.png);
 
 // 👉 Hàm sinh tên đầy đủ ngẫu nhiên
 function getRandomName() {
   const first = firstNames[Math.floor(Math.random() * firstNames.length)];
   const last = lastNames[Math.floor(Math.random() * lastNames.length)];
-  return `${first} ${last}`;
+  return ${first} ${last};
 }
 
 function randomFrom(arr) {
@@ -65,10 +65,10 @@ async function generateID() {
     // 📝 Thông tin text
     ctx.font = "bold 26px Arial";
     ctx.fillStyle = "red";
-    ctx.fillText(`Name    : ${name}`, 280, 225);
+    ctx.fillText(Name    : ${name}, 280, 225);
     ctx.fillText("Course  : B.E. (Civil)", 280, 265);
-    ctx.fillText(`Reg. No.: ${regNo}`, 280, 305);
-    ctx.fillText(`Year       : ${startYear} - ${endYear}`, 280, 345);
+    ctx.fillText(Reg. No.: ${regNo}, 280, 305);
+    ctx.fillText(Year       : ${startYear} - ${endYear}, 280, 345);
 
     // 🧾 Barcode (text only)
     ctx.fillStyle = "black";
@@ -86,7 +86,7 @@ function downloadImage() {
 
   const safeName = generatedName.replace(/\s+/g, '');
   const suffix = generatedRegNo.slice(-3);
-  const filename = `${safeName}${suffix}@dsuniversity.ac.in.jpg`;
+  const filename = ${safeName}${suffix}@dsuniversity.ac.in.jpg;
 
   link.download = filename;
   link.href = canvas.toDataURL("image/jpeg");
@@ -99,7 +99,7 @@ function downloadPDF() {
 
   const safeName = generatedName.replace(/\s+/g, '');
   const suffix = generatedRegNo.slice(-3);
-  const filename = `${safeName}${suffix}@dsuniversity.ac.in.pdf`;
+  const filename = ${safeName}${suffix}@dsuniversity.ac.in.pdf;
 
   const pdf = new window.jspdf.jsPDF({
     orientation: "landscape",
