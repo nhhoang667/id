@@ -1,18 +1,34 @@
 // 🇮🇳 Tên kiểu Ấn Độ (Họ + Tên)
 const firstNames = [
-  "Aarav", "Rohan", "Aditya", "Ishaan", "Rahul",
-  "Siddharth", "Karan", "Nikhil", "Amit", "Yash",
-  "Aniket", "Harsh", "Krishna", "Raj", "Vikas"
+  "Aarav", "Aditya", "Ishaan", "Rohan", "Rahul",
+  "Vivaan", "Arjun", "Siddharth", "Veer", "Kabir",
+  "Aryan", "Krishna", "Yash", "Nikhil", "Kunal",
+  "Tanish", "Reyansh", "Atharv", "Manav", "Parth",
+  "Dev", "Ritvik", "Ayaan", "Pranav", "Vihaan",
+  "Samar", "Tanmay", "Lakshya", "Hrithik", "Sarthak",
+  "Neil", "Rudra", "Om", "Aniket", "Amit",
+  "Harsh", "Rishi", "Anshul", "Yuvraj", "Mehul",
+  "Tushar", "Devansh", "Darsh", "Raghav", "Shaan",
+  "Nirav", "Ivaan", "Arnav", "Saurav", "Kabindra"
 ];
+
 const lastNames = [
   "Sharma", "Verma", "Reddy", "Patel", "Iyer",
   "Kumar", "Das", "Joshi", "Naidu", "Chopra",
-  "Mehta", "Rao", "Gupta", "Pandey", "Singh"
+  "Mehta", "Rao", "Gupta", "Pandey", "Singh",
+  "Nair", "Bhatia", "Chandra", "Malhotra", "Desai",
+  "Shetty", "Ghosh", "Jain", "Bhatt", "Sinha",
+  "Dubey", "Pillai", "Menon", "Rathi", "Kapoor",
+  "Kulkarni", "Tripathi", "Dixit", "Yadav", "Sen",
+  "Bansal", "Jha", "Kohli", "Bhaskar", "Tiwari",
+  "Rawat", "Mahajan", "Agrawal", "Roy", "Barua",
+  "Shukla", "Chauhan", "Mathur", "Mishra", "Saxena"
 ];
+
 
 const years = [["2024", "2027"], ["2023", "2026"]];
 const regPrefixes = ["721912", "721913", "721914"];
-const avatars = Array.from({ length: 15 }, (_, i) => `images/${i + 1}.png`);
+const avatars = Array.from({ length: 50 }, (_, i) => `images/${i + 1}.png`);
 
 // 👉 Biến toàn cục để dùng tên khi tải file
 let generatedName = "";
