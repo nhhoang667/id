@@ -1,4 +1,4 @@
-// 🇮🇳 Tên kiểu Ấn Độ (Họ + Tên)
+// 🇮🇳 Tên kiểu Ấn Độ
 const firstNames = [
   "Aarav", "Rohan", "Aditya", "Ishaan", "Rahul",
   "Siddharth", "Karan", "Nikhil", "Amit", "Yash",
@@ -12,13 +12,12 @@ const lastNames = [
 
 const years = [["2024", "2027"], ["2023", "2026"]];
 const regPrefixes = ["721912", "721913", "721914"];
-const avatars = Array.from({ length: 15 }, (_, i) => `images/${i + 1}.png`);
 
-// 👉 Biến toàn cục để dùng tên khi tải file
+// To store generated name + regNo for filename
 let generatedName = "";
 let generatedRegNo = "";
 
-// 👉 Hàm sinh tên đầy đủ ngẫu nhiên
+// Hàm tạo tên đầy đủ
 function getRandomName() {
   const first = firstNames[Math.floor(Math.random() * firstNames.length)];
   const last = lastNames[Math.floor(Math.random() * lastNames.length)];
@@ -32,10 +31,11 @@ function randomFrom(arr) {
 function loadImage(src) {
   return new Promise((resolve, reject) => {
     const img = new Image();
+    img.crossOrigin = "anonymous"; // Cần cho thispersondoesnotexist
     img.onload = () => resolve(img);
-    img.onerror = () => {
-      console.error("❌ Error loading:", src);
-      reject();
+    img.onerror = (e) => {
+      console.error("❌ Error loading image:", src);
+      reject(e);
     };
     img.src = src;
   });
@@ -52,21 +52,23 @@ async function generateID() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
 
-    const name = getRandomName(); // 🔁 Dùng tên kiểu Ấn
+    const name = getRandomName();
     const regNo = randomFrom(regPrefixes) + Math.floor(100000 + Math.random() * 900000);
     const [startYear, endYear] = randomFrom(years);
     const barcode = "24CV" + regNo.slice(-3);
-    const avatarPath = randomFrom(avatars);
-    const avatar = await loadImage(avatarPath);
 
-    // Lưu thông tin để đặt tên file
+    // Lưu cho tên file
     generatedName = name;
     generatedRegNo = regNo;
 
-    // 📸 Avatar
+    // 🖼️ Dùng ảnh online
+    const avatarURL = "https://thispersondoesnotexist.com/image";
+    const avatar = await loadImage(avatarURL);
+
+    // Vẽ avatar
     ctx.drawImage(avatar, 50, 195, 180, 260);
 
-    // 📝 Thông tin text
+    // Vẽ text
     ctx.font = "bold 26px Arial";
     ctx.fillStyle = "red";
     ctx.fillText(`Name    : ${name}`, 280, 225);
@@ -74,12 +76,11 @@ async function generateID() {
     ctx.fillText(`Reg. No.: ${regNo}`, 280, 305);
     ctx.fillText(`Year       : ${startYear} - ${endYear}`, 280, 345);
 
-    // 🧾 Barcode (text only)
     ctx.fillStyle = "black";
     ctx.font = "bold 26px monospace";
     ctx.fillText(barcode, 360, 455);
   } catch (err) {
-    console.error("🚨 Failed to generate:", err);
+    console.error("🚨 Failed to generate ID:", err);
   }
 }
 
@@ -87,7 +88,7 @@ function downloadImage() {
   const canvas = document.getElementById("idCanvas");
   const link = document.createElement("a");
 
-  const safeName = generatedName.replace(/\s+/g, ''); // Xóa khoảng trắng
+  const safeName = generatedName.replace(/\s+/g, '');
   const suffix = generatedRegNo.slice(-3);
   const filename = `${safeName}${suffix}@dsuniversity.ac.in.jpg`;
 
