@@ -49,7 +49,8 @@ async function generateID() {
     const name = getRandomName();
     const regNo = randomFrom(regPrefixes) + Math.floor(100000 + Math.random() * 900000);
     const [startYear, endYear] = randomFrom(years);
-    const barcode = "24CV" + regNo.slice(-3);
+    const yearSuffix = startYear.slice(-2); // Lấy 2 số cuối năm
+    const barcode = `${yearSuffix}CV${regNo.slice(-3)}`;
     const avatarPath = randomFrom(avatars);
     const avatar = await loadImage(avatarPath);
 
