@@ -13,26 +13,20 @@ const lastNames = [
 const years = [["2024", "2027"], ["2023", "2026"]];
 const regPrefixes = ["721912", "721913", "721914"];
 
+// ✅ Dùng avatar từ nguồn online CORS-friendly
+const avatars = [
+  "https://i.pravatar.cc/180?img=5",
+  "https://i.pravatar.cc/180?img=10",
+  "https://i.pravatar.cc/180?img=15",
+  "https://i.pravatar.cc/180?img=20",
+  "https://i.pravatar.cc/180?img=25"
+];
+
+// 👉 Biến toàn cục để dùng tên khi tải file
 let generatedName = "";
 let generatedRegNo = "";
 
-// 🔠 Lấy 2 chữ cái đầu từ tên
-function getInitials(name) {
-  const parts = name.trim().split(" ");
-  if (parts.length >= 2) {
-    return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
-  } else {
-    return name.slice(0, 2).toUpperCase();
-  }
-}
-
-// 🎨 Sinh màu nền ngẫu nhiên
-function getRandomColor() {
-  const colors = ["#3498db", "#e74c3c", "#f39c12", "#2ecc71", "#9b59b6"];
-  return colors[Math.floor(Math.random() * colors.length)];
-}
-
-// 🎯 Tạo tên ngẫu nhiên
+// 👉 Hàm sinh tên đầy đủ ngẫu nhiên
 function getRandomName() {
   const first = firstNames[Math.floor(Math.random() * firstNames.length)];
   const last = lastNames[Math.floor(Math.random() * lastNames.length)];
@@ -46,6 +40,7 @@ function randomFrom(arr) {
 function loadImage(src) {
   return new Promise((resolve, reject) => {
     const img = new Image();
+    img.crossOrigin = "anonymous"; // 👈 giúp tải ảnh từ domain khác
     img.onload = () => resolve(img);
     img.onerror = () => {
       console.error("❌ Error loading:", src);
@@ -70,32 +65,24 @@ async function generateID() {
     const regNo = randomFrom(regPrefixes) + Math.floor(100000 + Math.random() * 900000);
     const [startYear, endYear] = randomFrom(years);
     const barcode = "24CV" + regNo.slice(-3);
+    const avatarPath = randomFrom(avatars);
+    const avatar = await loadImage(avatarPath);
 
     generatedName = name;
     generatedRegNo = regNo;
 
-    // 📛 Vẽ avatar bằng text initials
-    const initials = getInitials(name);
-    const bgColor = getRandomColor();
+    // 📸 Avatar
+    ctx.drawImage(avatar, 50, 195, 180, 260);
 
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(50, 195, 180, 260);
-
-    ctx.fillStyle = "white";
-    ctx.font = "bold 80px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(initials, 140, 325); // center trong avatar box
-
-    // 📝 Thông tin
-    ctx.textAlign = "start";
-    ctx.fillStyle = "red";
+    // 📝 Thông tin text
     ctx.font = "bold 26px Arial";
+    ctx.fillStyle = "red";
     ctx.fillText(`Name    : ${name}`, 280, 225);
     ctx.fillText("Course  : B.E. (Civil)", 280, 265);
     ctx.fillText(`Reg. No.: ${regNo}`, 280, 305);
     ctx.fillText(`Year       : ${startYear} - ${endYear}`, 280, 345);
 
+    // 🧾 Barcode text
     ctx.fillStyle = "black";
     ctx.font = "bold 26px monospace";
     ctx.fillText(barcode, 360, 455);
@@ -121,11 +108,13 @@ function downloadPDF() {
   const safeName = generatedName.replace(/\s+/g, '');
   const suffix = generatedRegNo.slice(-3);
   const filename = `${safeName}${suffix}@dsuniversity.ac.in.pdf`;
+
   const pdf = new window.jspdf.jsPDF({
     orientation: "landscape",
     unit: "px",
     format: [canvas.width, canvas.height],
   });
+
   pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
   pdf.save(filename);
 }
