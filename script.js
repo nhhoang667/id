@@ -118,18 +118,10 @@ function downloadPDF() {
   pdf.save(filename);
 }
 
-// ✅ Copy email định dạng HoTen123@dsuniversity.ac.in
-function copyEmail() {
-  if (!generatedName || !generatedRegNo) {
-    alert("Please generate an ID first.");
-    return;
-  }
-  const safeName = generatedName.replace(/\s+/g, '');
-  const suffix = generatedRegNo.slice(-3);
-  const email = `${safeName}${suffix}@dsuniversity.ac.in`;
+// Hiển thị email vào textbox
+const safeName = generatedName.replace(/\s+/g, '');
+const suffix = generatedRegNo.slice(-3);
+const email = `${safeName}${suffix}@dsuniversity.ac.in`;
+document.getElementById("emailBox").value = email;
 
-  navigator.clipboard.writeText(email)
-    .then(() => alert(`Copied: ${email}`))
-    .catch(() => alert("Failed to copy email."));
-}
 
