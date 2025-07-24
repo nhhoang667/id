@@ -13,11 +13,26 @@ const lastNames = [
 const years = [["2024", "2027"], ["2023", "2026"]];
 const regPrefixes = ["721912", "721913", "721914"];
 
-// 👉 Biến toàn cục để dùng tên khi tải file
 let generatedName = "";
 let generatedRegNo = "";
 
-// 👉 Hàm sinh tên đầy đủ ngẫu nhiên
+// 🔠 Lấy 2 chữ cái đầu từ tên
+function getInitials(name) {
+  const parts = name.trim().split(" ");
+  if (parts.length >= 2) {
+    return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
+  } else {
+    return name.slice(0, 2).toUpperCase();
+  }
+}
+
+// 🎨 Sinh màu nền ngẫu nhiên
+function getRandomColor() {
+  const colors = ["#3498db", "#e74c3c", "#f39c12", "#2ecc71", "#9b59b6"];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+// 🎯 Tạo tên ngẫu nhiên
 function getRandomName() {
   const first = firstNames[Math.floor(Math.random() * firstNames.length)];
   const last = lastNames[Math.floor(Math.random() * lastNames.length)];
@@ -31,7 +46,6 @@ function randomFrom(arr) {
 function loadImage(src) {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = "anonymous"; // Cho phép tải ảnh online
     img.onload = () => resolve(img);
     img.onerror = () => {
       console.error("❌ Error loading:", src);
@@ -52,7 +66,7 @@ async function generateID() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
 
-    const name = getRandomName(); // 🔁 Dùng tên kiểu Ấn
+    const name = getRandomName();
     const regNo = randomFrom(regPrefixes) + Math.floor(100000 + Math.random() * 900000);
     const [startYear, endYear] = randomFrom(years);
     const barcode = "24CV" + regNo.slice(-3);
@@ -60,15 +74,23 @@ async function generateID() {
     generatedName = name;
     generatedRegNo = regNo;
 
-    // 📸 Avatar từ nguồn online
-    const avatarURL = "https://thispersondoesnotexist.com/image";
-    const avatar = await loadImage(avatarURL);
+    // 📛 Vẽ avatar bằng text initials
+    const initials = getInitials(name);
+    const bgColor = getRandomColor();
 
-    ctx.drawImage(avatar, 50, 195, 180, 260);
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(50, 195, 180, 260);
 
-    // 📝 Thông tin text
-    ctx.font = "bold 26px Arial";
+    ctx.fillStyle = "white";
+    ctx.font = "bold 80px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(initials, 140, 325); // center trong avatar box
+
+    // 📝 Thông tin
+    ctx.textAlign = "start";
     ctx.fillStyle = "red";
+    ctx.font = "bold 26px Arial";
     ctx.fillText(`Name    : ${name}`, 280, 225);
     ctx.fillText("Course  : B.E. (Civil)", 280, 265);
     ctx.fillText(`Reg. No.: ${regNo}`, 280, 305);
@@ -85,11 +107,9 @@ async function generateID() {
 function downloadImage() {
   const canvas = document.getElementById("idCanvas");
   const link = document.createElement("a");
-
   const safeName = generatedName.replace(/\s+/g, '');
   const suffix = generatedRegNo.slice(-3);
   const filename = `${safeName}${suffix}@dsuniversity.ac.in.jpg`;
-
   link.download = filename;
   link.href = canvas.toDataURL("image/jpeg");
   link.click();
@@ -98,17 +118,14 @@ function downloadImage() {
 function downloadPDF() {
   const canvas = document.getElementById("idCanvas");
   const imgData = canvas.toDataURL("image/jpeg");
-
   const safeName = generatedName.replace(/\s+/g, '');
   const suffix = generatedRegNo.slice(-3);
   const filename = `${safeName}${suffix}@dsuniversity.ac.in.pdf`;
-
   const pdf = new window.jspdf.jsPDF({
     orientation: "landscape",
     unit: "px",
     format: [canvas.width, canvas.height],
   });
-
   pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
   pdf.save(filename);
 }
