@@ -41,7 +41,7 @@ async function generateID() {
 
   try {
     const template = await loadImage("template/id_template.png");
-    canvas.width = 1255;
+    canvas.width = 1200;
     canvas.height = 757;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
@@ -57,18 +57,18 @@ async function generateID() {
     generatedName = name;
     generatedRegNo = regNo;
 
-    ctx.drawImage(avatar, 75, 290, 300, 450);
+    ctx.drawImage(avatar, 75, 300, 280, 420);
 
-    ctx.font = "bold 50px Arial";
+    ctx.font = "bold 48px Arial";
     ctx.fillStyle = "red";
-    ctx.fillText(`Name    : ${name}`, 420, 335);
-    ctx.fillText("Course  : B.E. (Civil)", 420, 400);
-    ctx.fillText(`Reg. No.: ${regNo}`, 420, 465);
-    ctx.fillText(`Year       : ${startYear} - ${endYear}`, 420, 530);
+    ctx.fillText(`Name    : ${name}`, 400, 335);
+    ctx.fillText("Course  : B.E. (Civil)", 400, 400);
+    ctx.fillText(`Reg. No.: ${regNo}`, 400, 465);
+    ctx.fillText(`Year       : ${startYear} - ${endYear}`, 400, 530);
 
     ctx.fillStyle = "black";
-    ctx.font = "bold 50px monospace";
-    ctx.fillText(barcode, 545, 685);
+    ctx.font = "bold 48px monospace";
+    ctx.fillText(barcode, 515, 685);
 
     // 📧 Show email
     const safeName = name.replace(/\s+/g, '');
@@ -84,7 +84,7 @@ async function generateID() {
 // 📤 Xuất PDF: dùng text rõ bằng jsPDF.text
 async function downloadPDF() {
   const canvas = document.createElement("canvas");
-  canvas.width = 1255;
+  canvas.width = 1200;
   canvas.height = 757;
   const ctx = canvas.getContext("2d");
 
@@ -97,7 +97,7 @@ async function downloadPDF() {
     const barcode = `${yearSuffix}CV${generatedRegNo.slice(-3)}`;
 
     ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
-    ctx.drawImage(avatar, 75, 290, 300, 450);
+    ctx.drawImage(avatar, 75, 300, 280, 420);
     const imgData = canvas.toDataURL("image/jpeg");
 
     const safeName = generatedName.replace(/\s+/g, '');
@@ -113,17 +113,17 @@ async function downloadPDF() {
     pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
 
     pdf.setFont("Helvetica", "bold");
-    pdf.setFontSize(50);
+    pdf.setFontSize(48);
     pdf.setTextColor(255, 0, 0);
-    pdf.text(`Name    : ${generatedName}`, 420, 335);
-    pdf.text("Course  : B.E. (Civil)", 420, 400);
-    pdf.text(`Reg. No.: ${generatedRegNo}`, 420, 465);
-    pdf.text(`Year       : ${startYear} - ${endYear}`, 420, 530);
+    pdf.text(`Name    : ${generatedName}`, 400, 335);
+    pdf.text("Course  : B.E. (Civil)", 400, 400);
+    pdf.text(`Reg. No.: ${generatedRegNo}`, 400, 465);
+    pdf.text(`Year       : ${startYear} - ${endYear}`, 400, 530);
 
     pdf.setFont("Courier", "bold");
-    pdf.setFontSize(50);
+    pdf.setFontSize(48);
     pdf.setTextColor(0, 0, 0);
-    pdf.text(barcode, 545, 685);
+    pdf.text(barcode, 515, 685);
 
     pdf.save(filename);
 
