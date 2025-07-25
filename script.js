@@ -113,15 +113,15 @@ async function downloadPDF() {
     pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
 
     pdf.setFont("Arial", "bold");
-    pdf.setFontSize(48);
+    pdf.setFontSize(50);
     pdf.setTextColor(255, 0, 0);
     pdf.text(`Name    : ${generatedName}`, 400, 335);
     pdf.text("Course  : B.E. (Civil)", 400, 400);
     pdf.text(`Reg. No.: ${generatedRegNo}`, 400, 465);
     pdf.text(`Year       : ${startYear} - ${endYear}`, 400, 530);
 
-    pdf.setFont("monospace", "bold");
-    pdf.setFontSize(48);
+    pdf.setFont("Arial", "bold");
+    pdf.setFontSize(50);
     pdf.setTextColor(0, 0, 0);
     pdf.text(barcode, 515, 685);
 
