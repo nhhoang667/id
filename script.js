@@ -64,10 +64,10 @@ async function generateID() {
     // 📝 Text
     ctx.font = "bold 50px Arial";
     ctx.fillStyle = "red";
-    ctx.fillText(`Name    : ${name}`, 400, 335);
-    ctx.fillText("Course  : B.E. (Civil)", 400, 400);
-    ctx.fillText(`Reg. No.: ${regNo}`, 400, 465);
-    ctx.fillText(`Year       : ${startYear} - ${endYear}`, 400, 530);
+    ctx.fillText(`Name    : ${name}`, 390, 335);
+    ctx.fillText("Course  : B.E. (Civil)", 390, 400);
+    ctx.fillText(`Reg. No.: ${regNo}`, 390, 465);
+    ctx.fillText(`Year       : ${startYear} - ${endYear}`, 390, 530);
 
     // 🧾 Barcode
     ctx.fillStyle = "black";
