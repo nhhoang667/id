@@ -34,7 +34,7 @@ function loadImage(src) {
   });
 }
 
-// 🎯 Generate ID (hiển thị trên canvas)
+// 🎯 Generate ID
 async function generateID() {
   const canvas = document.getElementById("idCanvas");
   const ctx = canvas.getContext("2d");
@@ -49,30 +49,34 @@ async function generateID() {
     const name = getRandomName();
     const regNo = randomFrom(regPrefixes) + Math.floor(100000 + Math.random() * 900000);
     const [startYear, endYear] = randomFrom(years);
-    const yearSuffix = startYear.slice(-2);
+    const yearSuffix = startYear.slice(-2); // Lấy 2 số cuối năm
     const barcode = `${yearSuffix}CV${regNo.slice(-3)}`;
     const avatarPath = randomFrom(avatars);
     const avatar = await loadImage(avatarPath);
 
+    // Gán biến toàn cục
     generatedName = name;
     generatedRegNo = regNo;
 
-    ctx.drawImage(avatar, 75, 300, 280, 420);
+    // 📸 Avatar
+    ctx.drawImage(avatar, 75, 290, 280, 420);
 
-    ctx.font = "bold 48px Arial";
+    // 📝 Text
+    ctx.font = "bold 50px Arial";
     ctx.fillStyle = "red";
-    ctx.fillText(`Name    : ${name}`, 400, 335);
-    ctx.fillText("Course  : B.E. (Civil)", 400, 400);
-    ctx.fillText(`Reg. No.: ${regNo}`, 400, 465);
-    ctx.fillText(`Year       : ${startYear} - ${endYear}`, 400, 530);
+    ctx.fillText(`Name    : ${name}`, 410, 335);
+    ctx.fillText("Course  : B.E. (Civil)", 410, 400);
+    ctx.fillText(`Reg. No.: ${regNo}`, 410, 465);
+    ctx.fillText(`Year       : ${startYear} - ${endYear}`, 410, 530);
 
+    // 🧾 Barcode
     ctx.fillStyle = "black";
-    ctx.font = "bold 48px monospace";
+    ctx.font = "bold 50px monospace";
     ctx.fillText(barcode, 515, 685);
 
-    // 📧 Show email
-    const safeName = name.replace(/\s+/g, '');
-    const suffix = regNo.slice(-3);
+    // 📨 Hiển thị email
+    const safeName = generatedName.replace(/\s+/g, '');
+    const suffix = generatedRegNo.slice(-3);
     const email = `${safeName}${suffix}@dsuniversity.ac.in`;
     document.getElementById("emailDisplay").textContent = email;
 
@@ -81,53 +85,21 @@ async function generateID() {
   }
 }
 
-// 📤 Xuất PDF: dùng text rõ bằng jsPDF.text
-async function downloadPDF() {
-  const canvas = document.createElement("canvas");
-  canvas.width = 1200;
-  canvas.height = 757;
-  const ctx = canvas.getContext("2d");
+// 📤 PDF Export
+function downloadPDF() {
+  const canvas = document.getElementById("idCanvas");
+  const imgData = canvas.toDataURL("image/jpeg");
 
-  try {
-    const template = await loadImage("template/id_template.png");
-    const avatarPath = randomFrom(avatars);
-    const avatar = await loadImage(avatarPath);
-    const [startYear, endYear] = randomFrom(years);
-    const yearSuffix = startYear.slice(-2);
-    const barcode = `${yearSuffix}CV${generatedRegNo.slice(-3)}`;
+  const safeName = generatedName.replace(/\s+/g, '');
+  const suffix = generatedRegNo.slice(-3);
+  const filename = `${safeName}${suffix}@dsuniversity.ac.in.pdf`;
 
-    ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
-    ctx.drawImage(avatar, 75, 300, 280, 420);
-    const imgData = canvas.toDataURL("image/jpeg");
+  const pdf = new window.jspdf.jsPDF({
+    orientation: "landscape",
+    unit: "px",
+    format: [canvas.width, canvas.height],
+  });
 
-    const safeName = generatedName.replace(/\s+/g, '');
-    const suffix = generatedRegNo.slice(-3);
-    const filename = `${safeName}${suffix}@dsuniversity.ac.in.pdf`;
-
-    const pdf = new window.jspdf.jsPDF({
-      orientation: "landscape",
-      unit: "px",
-      format: [canvas.width, canvas.height],
-    });
-
-    pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
-
-    pdf.setFont("Helvetica", "bold");
-    pdf.setFontSize(48);
-    pdf.setTextColor(255, 0, 0);
-    pdf.text(`Name    : ${generatedName}`, 400, 335);
-    pdf.text("Course  : B.E. (Civil)", 400, 400);
-    pdf.text(`Reg. No.: ${generatedRegNo}`, 400, 465);
-    pdf.text(`Year       : ${startYear} - ${endYear}`, 400, 530);
-
-    pdf.setFont("Courier", "bold");
-    pdf.setFontSize(48);
-    pdf.setTextColor(0, 0, 0);
-    pdf.text(barcode, 515, 685);
-
-    pdf.save(filename);
-
-  } catch (err) {
-    console.error("❌ Failed to export PDF:", err);
-  }
+  pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
+  pdf.save(filename);
 }
