@@ -112,7 +112,7 @@ async function downloadPDF() {
 
     pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
 
-    pdf.setFont("Helvetica", "bold");
+    pdf.setFont("Arial", "bold");
     pdf.setFontSize(48);
     pdf.setTextColor(255, 0, 0);
     pdf.text(`Name    : ${generatedName}`, 400, 335);
@@ -120,7 +120,7 @@ async function downloadPDF() {
     pdf.text(`Reg. No.: ${generatedRegNo}`, 400, 465);
     pdf.text(`Year       : ${startYear} - ${endYear}`, 400, 530);
 
-    pdf.setFont("Courier", "bold");
+    pdf.setFont("monospace", "bold");
     pdf.setFontSize(48);
     pdf.setTextColor(0, 0, 0);
     pdf.text(barcode, 515, 685);
