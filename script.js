@@ -113,7 +113,7 @@ async function downloadPDF() {
     pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
 
     pdf.setFont("Helvetica", "bold");
-    pdf.setFontSize(32);
+    pdf.setFontSize(50);
     pdf.setTextColor(255, 0, 0);
     pdf.text(`Name    : ${generatedName}`, 420, 335);
     pdf.text("Course  : B.E. (Civil)", 420, 400);
@@ -121,7 +121,7 @@ async function downloadPDF() {
     pdf.text(`Year       : ${startYear} - ${endYear}`, 420, 530);
 
     pdf.setFont("Courier", "bold");
-    pdf.setFontSize(36);
+    pdf.setFontSize(50);
     pdf.setTextColor(0, 0, 0);
     pdf.text(barcode, 545, 685);
 
