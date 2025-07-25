@@ -34,7 +34,7 @@ function loadImage(src) {
   });
 }
 
-// 🎯 Generate ID
+// 🎯 Generate ID (hiển thị trên canvas)
 async function generateID() {
   const canvas = document.getElementById("idCanvas");
   const ctx = canvas.getContext("2d");
@@ -49,19 +49,16 @@ async function generateID() {
     const name = getRandomName();
     const regNo = randomFrom(regPrefixes) + Math.floor(100000 + Math.random() * 900000);
     const [startYear, endYear] = randomFrom(years);
-    const yearSuffix = startYear.slice(-2); // Lấy 2 số cuối năm
+    const yearSuffix = startYear.slice(-2);
     const barcode = `${yearSuffix}CV${regNo.slice(-3)}`;
     const avatarPath = randomFrom(avatars);
     const avatar = await loadImage(avatarPath);
 
-    // Gán biến toàn cục
     generatedName = name;
     generatedRegNo = regNo;
 
-    // 📸 Avatar
     ctx.drawImage(avatar, 75, 290, 300, 450);
 
-    // 📝 Text
     ctx.font = "bold 50px Arial";
     ctx.fillStyle = "red";
     ctx.fillText(`Name    : ${name}`, 420, 335);
@@ -69,14 +66,13 @@ async function generateID() {
     ctx.fillText(`Reg. No.: ${regNo}`, 420, 465);
     ctx.fillText(`Year       : ${startYear} - ${endYear}`, 420, 530);
 
-    // 🧾 Barcode
     ctx.fillStyle = "black";
     ctx.font = "bold 50px monospace";
     ctx.fillText(barcode, 545, 685);
 
-    // 📨 Hiển thị email
-    const safeName = generatedName.replace(/\s+/g, '');
-    const suffix = generatedRegNo.slice(-3);
+    // 📧 Show email
+    const safeName = name.replace(/\s+/g, '');
+    const suffix = regNo.slice(-3);
     const email = `${safeName}${suffix}@dsuniversity.ac.in`;
     document.getElementById("emailDisplay").textContent = email;
 
@@ -85,22 +81,53 @@ async function generateID() {
   }
 }
 
-// 📤 PDF Export
-function downloadPDF() {
-  const canvas = document.getElementById("idCanvas");
-  const imgData = canvas.toDataURL("image/jpeg");
+// 📤 Xuất PDF: dùng text rõ bằng jsPDF.text
+async function downloadPDF() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1255;
+  canvas.height = 757;
+  const ctx = canvas.getContext("2d");
 
-  const safeName = generatedName.replace(/\s+/g, '');
-  const suffix = generatedRegNo.slice(-3);
-  const filename = `${safeName}${suffix}@dsuniversity.ac.in.pdf`;
+  try {
+    const template = await loadImage("template/id_template.png");
+    const avatarPath = randomFrom(avatars);
+    const avatar = await loadImage(avatarPath);
+    const [startYear, endYear] = randomFrom(years);
+    const yearSuffix = startYear.slice(-2);
+    const barcode = `${yearSuffix}CV${generatedRegNo.slice(-3)}`;
 
-  const pdf = new window.jspdf.jsPDF({
-    orientation: "landscape",
-    unit: "px",
-    format: [canvas.width, canvas.height],
-  });
+    ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(avatar, 75, 290, 300, 450);
+    const imgData = canvas.toDataURL("image/jpeg");
 
-  pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
-  pdf.save(filename);
+    const safeName = generatedName.replace(/\s+/g, '');
+    const suffix = generatedRegNo.slice(-3);
+    const filename = `${safeName}${suffix}@dsuniversity.ac.in.pdf`;
+
+    const pdf = new window.jspdf.jsPDF({
+      orientation: "landscape",
+      unit: "px",
+      format: [canvas.width, canvas.height],
+    });
+
+    pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
+
+    pdf.setFont("Helvetica", "bold");
+    pdf.setFontSize(32);
+    pdf.setTextColor(255, 0, 0);
+    pdf.text(`Name    : ${generatedName}`, 420, 335);
+    pdf.text("Course  : B.E. (Civil)", 420, 400);
+    pdf.text(`Reg. No.: ${generatedRegNo}`, 420, 465);
+    pdf.text(`Year       : ${startYear} - ${endYear}`, 420, 530);
+
+    pdf.setFont("Courier", "bold");
+    pdf.setFontSize(36);
+    pdf.setTextColor(0, 0, 0);
+    pdf.text(barcode, 545, 685);
+
+    pdf.save(filename);
+
+  } catch (err) {
+    console.error("❌ Failed to export PDF:", err);
+  }
 }
-
