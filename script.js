@@ -41,8 +41,8 @@ async function generateID() {
 
   try {
     const template = await loadImage("template/id_template.png");
-    canvas.width = 800;
-    canvas.height = 504;
+    canvas.width = 1255;
+    canvas.height = 757;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
 
@@ -59,20 +59,20 @@ async function generateID() {
     generatedRegNo = regNo;
 
     // 📸 Avatar
-    ctx.drawImage(avatar, 50, 195, 180, 260);
+    ctx.drawImage(avatar, 75, 290, 300, 450);
 
     // 📝 Text
-    ctx.font = "bold 26px Arial";
+    ctx.font = "bold 50px Arial";
     ctx.fillStyle = "red";
-    ctx.fillText(`Name    : ${name}`, 280, 225);
-    ctx.fillText("Course  : B.E. (Civil)", 280, 265);
-    ctx.fillText(`Reg. No.: ${regNo}`, 280, 305);
-    ctx.fillText(`Year       : ${startYear} - ${endYear}`, 280, 345);
+    ctx.fillText(`Name    : ${name}`, 420, 335);
+    ctx.fillText("Course  : B.E. (Civil)", 420, 400);
+    ctx.fillText(`Reg. No.: ${regNo}`, 420, 465);
+    ctx.fillText(`Year       : ${startYear} - ${endYear}`, 420, 530);
 
     // 🧾 Barcode
     ctx.fillStyle = "black";
-    ctx.font = "bold 26px monospace";
-    ctx.fillText(barcode, 360, 455);
+    ctx.font = "bold 50px monospace";
+    ctx.fillText(barcode, 545, 685);
 
     // 📨 Hiển thị email
     const safeName = generatedName.replace(/\s+/g, '');
