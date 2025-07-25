@@ -59,15 +59,15 @@ async function generateID() {
     generatedRegNo = regNo;
 
     // 📸 Avatar
-    ctx.drawImage(avatar, 75, 290, 280, 420);
+    ctx.drawImage(avatar, 75, 300, 280, 420);
 
     // 📝 Text
     ctx.font = "bold 50px Arial";
     ctx.fillStyle = "red";
-    ctx.fillText(`Name    : ${name}`, 410, 335);
-    ctx.fillText("Course  : B.E. (Civil)", 410, 400);
-    ctx.fillText(`Reg. No.: ${regNo}`, 410, 465);
-    ctx.fillText(`Year       : ${startYear} - ${endYear}`, 410, 530);
+    ctx.fillText(`Name    : ${name}`, 400, 335);
+    ctx.fillText("Course  : B.E. (Civil)", 400, 400);
+    ctx.fillText(`Reg. No.: ${regNo}`, 400, 465);
+    ctx.fillText(`Year       : ${startYear} - ${endYear}`, 400, 530);
 
     // 🧾 Barcode
     ctx.fillStyle = "black";
