@@ -72,7 +72,7 @@ async function generateID() {
     // 🧾 Barcode
     ctx.fillStyle = "black";
     ctx.font = "bold 50px monospace";
-    ctx.fillText(barcode, 515, 685);
+    ctx.fillText(barcode, 515, 690);
 
     // 📨 Hiển thị email
     const safeName = generatedName.replace(/\s+/g, '');
